@@ -1,17 +1,18 @@
 "-----------------------------------------------------------------------------
 " theme
 
+set termguicolors
 set background=dark
 colorscheme onedark
 
 let g:lightline = { 
       \  'colorscheme': 'onedark', 
       \  'active': {
-      \    'left': [ ['mode', 'paste'], [], ['readonly', 'filename'] ],
-      \    'right': [ [ 'lineinfo' ], [ 'percent' ] ],
+      \    'left': [ [], ['file_path', 'readonly'], [] ],
+      \    'right': [ [], [ 'lineinfo', 'percent' ] ],
       \  },
       \  'component_function': {
-      \    'filename': 'LightlineFilename',
+      \    'file_path': 'LightlineFilename',
       \  },
       \  'separator': { 'left': '', 'right': '' },
       \  'subseparator': {'left': '', 'right': '' },
@@ -21,8 +22,7 @@ let g:lightline = {
       " \ 'subseparator': { 'left': '', 'right': '' }
 
 function! LightlineFilename()
-  let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
-  " let modified = &modified ? ' •' : ''
+  let filename = expand('%:t') !=# '' ? @% : '[No Name]'
   let modified = &modified ? ' [+]' : ''
   return filename . modified 
 endfunction

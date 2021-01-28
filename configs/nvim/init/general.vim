@@ -2,9 +2,14 @@ set number
 set termguicolors
 set noshowmode
 
-" default to 2 spaces indent
+" show file path in status line
+set statusline+=%F
+
+" show existing tab with 2 spaces width
+set tabstop=2
+set softtabstop=2
 set shiftwidth=2
-set smartindent
+set expandtab
 
 " enable mouse support
 set mouse=a
@@ -15,7 +20,7 @@ set autoread
 autocmd TextChanged,TextChangedI <buffer> silent write
 
 " use ranger when opening a directory
-let g:ranger_replace_netrw = 1 
+" let g:ranger_replace_netrw = 1 
 
 " undo
 set undofile
@@ -42,10 +47,11 @@ xnoremap > >gv
 xnoremap < <gv
 
 " TODO test
-" augroup OpenQuickfixWindowAfterMake
-"     autocmd QuickFixCmdPost [^l]* nested cwindow
-"     autocmd QuickFixCmdPost    l* nested lwindow
-" augroup END
+augroup OpenQuickfixWindowAfterMake
+    autocmd QuickFixCmdPost [^l]* nested cwindow
+    autocmd QuickFixCmdPost    l* nested lwindow
+augroup END
 
 set title titlestring=%{substitute(getcwd(),'^.*/','','')}
 
+let g:rustfmt_autosave = 1

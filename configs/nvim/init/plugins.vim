@@ -1,3 +1,10 @@
+" for MacVim, install this way
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 "------------------------------------------------------------------------------
 " plugins
 
@@ -13,8 +20,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/fzf.vim'
 
   " autocomplete
-  " Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  " Plug 'fannheyward/coc-rust-analyzer'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'fannheyward/coc-rust-analyzer'
 
   " expand (+) or shrink (_) selection
   Plug 'terryma/vim-expand-region'
@@ -30,18 +37,19 @@ call plug#begin('~/.vim/plugged')
   Plug 'lambdalisue/gina.vim'
   " Plug 'wangsongiam/vim-git-it'
 
-  " async compilation
-  " Plug 'tpope/vim-dispatch'
-
   " autoclose brackets on 'enter'
   " Plug 'rstacruz/vim-closer'
  
   " formatting code
   " Plug 'sbdchd/neoformat'
 
+  " smooth scrolling
+  Plug 'yuttie/comfortable-motion.vim'
+
   " languages
   Plug 'tikhomirov/vim-glsl'
   Plug 'cespare/vim-toml'
-  " Plug 'rust-lang/rust.vim'
+  Plug 'rust-lang/rust.vim'
+  Plug 'ziglang/zig.vim'
 
 call plug#end()

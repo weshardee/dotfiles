@@ -1,4 +1,5 @@
-export RUSTC_WRAPPER="sccache"
+# disable for now since sccache messes up spirv https://github.com/gwihlidal/spirv-reflect-rs/issues/13
+# export RUSTC_WRAPPER="sccache"
 export EDITOR="nvim"
 export MYVIMRC="$HOME/.config/nvim/init.vim"
 
