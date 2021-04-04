@@ -9,6 +9,9 @@ endif
 " plugins
 
 call plug#begin('~/.vim/plugged')
+  " casing coercion
+  Plug 'tpope/vim-abolish'
+
   " theme
   Plug 'joshdick/onedark.vim'
 
@@ -46,10 +49,17 @@ call plug#begin('~/.vim/plugged')
   " smooth scrolling
   Plug 'yuttie/comfortable-motion.vim'
 
+  " snippets
+  " Plug 'SirVer/ultisnips'
+
+  " async builds
+  Plug 'neomake/neomake'
+
   " languages
   Plug 'tikhomirov/vim-glsl'
   Plug 'cespare/vim-toml'
   Plug 'rust-lang/rust.vim'
   Plug 'ziglang/zig.vim'
+  Plug 'Tetralux/odin.vim'
 
 call plug#end()

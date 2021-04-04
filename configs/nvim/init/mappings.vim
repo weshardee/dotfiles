@@ -22,9 +22,10 @@ nnoremap <silent><leader>s :w<CR>
 nnoremap <silent>q :bd<CR>
 
 " make
-nnoremap M :make<CR>
+" nnoremap M :make<CR>
 autocmd FileType rust nnoremap M :make run<CR>
 autocmd FileType zig nnoremap M :make run<CR>
+set makeprg=./m
 
 " comment toggling
 map <leader>/ gcc
@@ -48,6 +49,7 @@ nnoremap <leader>fb :BLines<CR>
 
 " ranger
 nnoremap <leader>r :Ranger<CR>
+nnoremap <leader>e :Explore<CR>
 
 " git shortcuts
 nnoremap <leader>gs :Gina status -s<CR>
@@ -59,11 +61,11 @@ vnoremap <leader>gw :Gina browse :<CR>
 
 " close git buffers
 call gina#custom#mapping#nmap('status', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1})
-call gina#custom#mapping#nmap( 'diff', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1})
-call gina#custom#mapping#nmap( 'blame', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1}) 
-call gina#custom#mapping#nmap( 'log', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1})
-call gina#custom#mapping#nmap( 'commit', 'q', ':q!<CR>', {'noremap': 1, 'silent': 1})
-call gina#custom#mapping#nmap( 'show', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1})
+call gina#custom#mapping#nmap('diff', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1})
+call gina#custom#mapping#nmap('blame', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1}) 
+call gina#custom#mapping#nmap('log', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1})
+call gina#custom#mapping#nmap('commit', 'q', ':q!<CR>', {'noremap': 1, 'silent': 1})
+call gina#custom#mapping#nmap('show', 'q', ':bd<CR>', {'noremap': 1, 'silent': 1})
 
 " clear search on return
 nnoremap <silent> <CR> :noh<CR><CR>
@@ -76,3 +78,15 @@ nnoremap <esc>^[ <esc>^[
 nnoremap <leader>dd <Plug>(coc-definition)
 nnoremap <leader>di <Plug>(coc-implementation)
 nnoremap <leader>dr <Plug>(coc-references)
+
+
+" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" Neomake: 
+" nnoremap M :Neomake! make<CR>
+nnoremap M :make<CR>
