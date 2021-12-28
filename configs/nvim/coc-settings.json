@@ -1,9 +1,16 @@
 {
+  "coc.preferences.formatOnSaveFiletypes": ["vlang"],
+  "diagnostic.locationlist": true,
+  "diagnostic.checkCurrentLine": true,
   "languageserver": {
     "odin": {
       "command": "ols",
       "rootPatterns": ["ols.json"],
       "filetypes": ["odin"]
+    },
+    "vlang": {
+      "command": "vls",
+      "filetypes": ["vlang"]
     }
   }
 }
