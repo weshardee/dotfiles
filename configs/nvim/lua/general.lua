@@ -3,8 +3,9 @@
 ------------------------------------------------------------------------------
 
 local o = vim.o
+local cmd = vim.cmd
 
-vim.cmd[[set title titlestring=%{substitute(getcwd(),'^.*/','','')}]]
+cmd[[set title titlestring=%{substitute(getcwd(),'^.*/','','')}]]
 
 o.termguicolors = true
 o.compatible = false
@@ -44,11 +45,9 @@ o.smartcase = true
 -- Automatically re-read file if a change was detected outside of vim
 o.autoread = true
 
-vim.cmd([[
-" don't lose selection on indenting
-xnoremap > >gv
-xnoremap < <gv
+-- don't lose selection on indenting
+cmd[[xnoremap > >gv]]
+cmd[[xnoremap < <gv]]
 
-" sane visual mode pasting
-xnoremap <expr> p 'pgv"'.v:register.'y`>'
-]])
+-- sane visual mode pasting
+cmd[[xnoremap <expr> p 'pgv"'.v:register.'y`>']]
