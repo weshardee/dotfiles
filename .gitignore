@@ -1,2 +1,5 @@
 .netrwhist
 vls.log
+.DS_Store
+zsh_lib
+~
