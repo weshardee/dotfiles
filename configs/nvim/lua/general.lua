@@ -4,6 +4,8 @@
 
 local o = vim.o
 
+vim.cmd[[set title titlestring=%{substitute(getcwd(),'^.*/','','')}]]
+
 o.termguicolors = true
 o.compatible = false
 o.number = true
