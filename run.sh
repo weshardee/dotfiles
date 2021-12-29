@@ -13,11 +13,8 @@ ln -sf ${PWD}/zsh_lib ~/.zsh_lib
 [ ! z ] && brew install z
 [ ! fzf ] && brew install fzf
 [ ! nvim ] && brew install nvim
-[ ! ag ] && brew install the_silver_searcher
-[ ! rg ] && brew install rg # TODO pick one searcher
-[ ! ranger ] && brew install ranger
+[ ! rg ] && brew install rg
 
 # vim plugins
-[ ! "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim ] && sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-
+git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ~/.local/share/nvim/site/pack/packer/start/packer.nvim

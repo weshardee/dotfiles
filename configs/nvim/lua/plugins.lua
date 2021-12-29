@@ -1,22 +1,78 @@
--- ensure packer is available
 local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local execute = vim.api.nvim_command
+local map = vim.api.nvim_set_keymap
+
 if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
+  execute "packadd packer.nvim"
 end
 
-return require('packer').startup(function(use)
+-- Auto source when there are changes in plugins.lua
+local au = require("util/au")
+au.group("PackerGroup", {{"BufWritePost", "plugins.lua", "source <afile> | PackerCompile profile=true"}})
 
-  -- theme & UI
-  use 'itchyny/lightline.vim'
-  use 'projekt0n/github-nvim-theme'
+return require('packer').startup(function(use)
+  use 'wbthomason/packer.nvim'
+
+  -- startup time
+  use {
+    "dstein64/vim-startuptime",
+    config = function()
+      local map = vim.api.nvim_set_keymap
+      map("n", "<Leader>st", ":StartupTime<CR>", {noremap = true})
+    end
+  }
+
+  -- theme
+  use {
+    'ful1e5/onedark.nvim',
+    opt = false,
+    config = function()
+      require("onedark").setup({
+        -- transparent = true,
+        dark_float = false,
+        hide_inactive_statusline = true,
+        dark_sidebar = false,
+        dev = true
+      })
+    end
+  }
+
+  -- telescope & fuzzy finding
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} },
+    config = function()
+      map = vim.api.nvim_set_keymap
+      opts = {silent = true, noremap = true}
+      map('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)
+      map('n', ';', "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)
+      map('n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", opts)
+      map('n', '\'', "<cmd>lua require('telescope.builtin').live_grep()<cr>", opts)
+      map('n', '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>", opts)
+      map('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", opts)
+      map('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
+    end
+  }
+
+  -- lualine
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = {'kyazdani42/nvim-web-devicons', opt = true},
+    config = function()
+      require('lualine').setup({
+        sections = {
+          lualine_a = {'mode'},
+          lualine_b = {'filename'},
+          lualine_c = {},
+       },
+    })
+    end
+  }
 
   -- comment toggling
   use 'tomtom/tcomment_vim'
-
-  -- autocomplete
-  -- use 'neoclide/coc.nvim', {'branch': 'release'}
-  -- use 'neovim/nvim-lspconfig'
 
   -- async builds
   use 'neomake/neomake'
@@ -24,12 +80,26 @@ return require('packer').startup(function(use)
   -- languages
   use 'ollykel/v-vim'
 
-  use 'ntpeters/vim-better-whitespace'
-  -- use 'jremmen/vim-ripgrep'
+  -- circles
+  use {
+    "projekt0n/circles.nvim",
+    requires = {{"kyazdani42/nvim-web-devicons"}, {"kyazdani42/nvim-tree.lua", opt = true}},
+    config = function()
+      require("circles").setup()
+    end
+  }
 
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  if packer_bootstrap then
-    require('packer').sync()
-  end
+  -- treesitter interface
+  use 'nvim-treesitter/nvim-treesitter'
+
+  -- LSP
+  use 'neovim/nvim-lspconfig'
+
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
+  }
+
 end)
+
+
