@@ -1,7 +1,11 @@
 local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 local execute = vim.api.nvim_command
-local map = vim.api.nvim_set_keymap
+
+function map(mode, trigger, action, opts)
+  opts = opts or { noremap = true, silent = true }
+  vim.api.nvim_set_keymap(mode, trigger, action, opts)
+end
 
 -- bootstrap packer on new systems
 if fn.empty(fn.glob(install_path)) > 0 then
@@ -11,10 +15,10 @@ end
 
 -- Auto source when there are changes in plugins.lua
 vim.cmd([[
-	augroup packer_user_config
-	autocmd!
-	autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-	augroup end
+  augroup packer_user_config
+  autocmd!
+  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+  augroup end
 ]])
 
 return require('packer').startup(function(use)
@@ -24,12 +28,12 @@ return require('packer').startup(function(use)
 	-- critical QoL improvements
 	--
 
-	use 'rhysd/clever-f.vim'
   use 'tomtom/tcomment_vim'
   use {
     'rmagatti/auto-session',
     config = function() require('auto-session').setup({}) end
   } 
+	-- TODO nvim lua equivalent use 'rhysd/clever-f.vim'
 
   -- 
 	-- theme
@@ -44,14 +48,6 @@ return require('packer').startup(function(use)
 			vim.cmd[[colorscheme dracula]]
 		end
 	}
-	-- TODO remove?
-	-- use {
-	-- 	"projekt0n/circles.nvim",
-	-- 	requires = {{"kyazdani42/nvim-web-devicons"}, },
-	-- 	config = function()
-	-- 		require("circles").setup()
-	-- 	end
-	-- }
 
 	--
   -- project navigation
@@ -194,7 +190,10 @@ return require('packer').startup(function(use)
     end
   }
 
-	-- TODO evaluate if I really want this
+	--
+	-- under evaluation
+	-- 
+	
 	use {
     'simrat39/lsp-trouble.nvim',
     requires = "kyazdani42/nvim-web-devicons",
@@ -202,6 +201,26 @@ return require('packer').startup(function(use)
       require("trouble").setup {}
     end
   }
+
+	-- use 'phaazon/hop.nvim'
+
+	use {
+		"projekt0n/circles.nvim",
+		requires = {{"kyazdani42/nvim-web-devicons"}, },
+		config = function()
+			require("circles").setup()
+		end
+	}
+
+	-- themes
+	-- use 'rafamadriz/neon'
+
+	-- bars
+	-- use {
+	-- 	'romgrk/barbar.nvim',
+	-- 	requires = {'kyazdani42/nvim-web-devicons'}
+	-- }
+	-- use 'akinsho/bufferline.nvim'
 
 end)
 
