@@ -2,21 +2,34 @@
 -- General
 ------------------------------------------------------------------------------
 
+local opt = vim.opt
 local o = vim.o
+local g = vim.g
 local cmd = vim.cmd
 
 cmd[[set title titlestring=%{substitute(getcwd(),'^.*/','','')}]]
 
-o.termguicolors = true
-o.compatible = false
-o.number = true
-o.termguicolors = true
+opt.updatetime = 500
+
+opt.signcolumn = 'yes' -- always show, so there's no jitter when it toggles
+opt.compatible = false
+opt.hidden = true
+opt.number = true
+opt.cmdheight = 1
+
+-- syntax highlighting
+opt.termguicolors = true
+g.syntax_on = true
 
 -- show existing tab with 2 spaces width
-o.tabstop = 2
-o.softtabstop = 2
-o.shiftwidth = 2
-o.expandtab = true
+opt.tabstop = 2
+opt.shiftwidth = 2
+opt.softtabstop = 2
+opt.autoindent = true
+g.smartindent = true
+
+-- don't wrap lines
+opt.wrap = false
 
 -- enable mouse support
 o.mouse = 'a'
@@ -31,19 +44,19 @@ o.cursorline = true
 -- show mathing parens/brackets/braces
 o.showmatch = true
 
--- highlight as we search
-o.incsearch = true
-o.hlsearch = true
+-- search
+opt.incsearch = true
+opt.hlsearch = true
+opt.ignorecase = true
+opt.smartcase = true
+opt.wrapscan = true
 
 -- y and and paste with system clipboard
-o.clipboard = 'unnamed'
+opt.clipboard = 'unnamedplus'
 
--- ignore case when searching, unless the string has an uppercase letter
-o.ignorecase = true
-o.smartcase = true
 
 -- Automatically re-read file if a change was detected outside of vim
-o.autoread = true
+opt.autoread = true
 
 -- don't lose selection on indenting
 cmd[[xnoremap > >gv]]

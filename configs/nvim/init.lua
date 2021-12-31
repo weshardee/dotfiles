@@ -1,5 +1,5 @@
 require('plugins')
-require('general')
+require('options')
 require('maps')
 require('lang/v')
 
