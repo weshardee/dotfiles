@@ -1,13 +1,13 @@
-local fn = vim.fn
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-local execute = vim.api.nvim_command
+-------------------------------------------------------------------------------
+-- PLUGINS
+-------------------------------------------------------------------------------
 
-function map(mode, trigger, action, opts)
-  opts = opts or { noremap = true, silent = true }
-  vim.api.nvim_set_keymap(mode, trigger, action, opts)
-end
+local fn = vim.fn
+local execute = vim.api.nvim_command
+local add = require('cmd').add
 
 -- bootstrap packer on new systems
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
   execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
   execute "packadd packer.nvim"
@@ -28,7 +28,7 @@ return require('packer').startup(function(use)
 	-- critical QoL improvements
 	--
 
-  use 'tomtom/tcomment_vim'
+  use 'tpope/vim-commentary'
   use {
     'rmagatti/auto-session',
     config = function() require('auto-session').setup({}) end
@@ -45,7 +45,15 @@ return require('packer').startup(function(use)
 		'Mofiqul/dracula.nvim',
 		opt = false,
 		config = function()
-			vim.cmd[[colorscheme dracula]]
+			vim.cmd [[colorscheme dracula]]
+		end
+	}
+
+	use {
+		"projekt0n/circles.nvim",
+		requires = {{"kyazdani42/nvim-web-devicons"}, },
+		config = function()
+			require("circles").setup()
 		end
 	}
 
@@ -64,25 +72,47 @@ return require('packer').startup(function(use)
     },
     defaults = {
       mappings = {
-        i = {
+        n = {
           ["<Esc>"] = require('telescope.actions').close
         }
       }
     },
     config = function()
-      map = vim.api.nvim_set_keymap
-      opts = {silent = true, noremap = true}
-      map('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)
-      map('n', ';', "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)
-      map('n', '<C-p>', "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)
-      map('n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", opts)
-      map('n', '\'', "<cmd>lua require('telescope.builtin').live_grep()<cr>", opts)
-      map('n', '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>", opts)
-      map('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", opts)
-      map('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
+			local add = require('cmd').add
+      add {
+				'Telescope: find files',
+				'n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>"}
+      add { 'Telescope:', 'n', ';', "<cmd>lua require('telescope.builtin').find_files()<cr>" }
+      add { 'Telescope:', 'n', '<C-p>', "<cmd>lua require('telescope.builtin').find_files()<cr>" }
+      add { 'Telescope:', 'n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>" }
+      add { 'Telescope:', 'n', '\'', "<cmd>lua require('telescope.builtin').live_grep()<cr>" }
+      add { 'Telescope:', 'n', '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>" }
+      add { 'Telescope:', 'n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>" }
+      add { 'Telescope:', 'n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>" }
+      
+			add { 'Telescope:', 'n', '<leader>fd', "<cm:d>lua require('telescope.builtin').lsp_definitions()<cr>" }
+			add { 'Telescope:', 'n', '<leader>fd', "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>" }
     end
   }
 
+
+	-- use {
+	-- 	"LinArcX/telescope-command-palette.nvim",
+	-- 	require = {'nvim-telescope/telescope.nvim'},
+	-- 	config = function()
+      -- map = vim.api.nvim_set_keymap
+      -- opts = {silent = true, noremap = true}
+	-- 		require('telescope').load_extension('command_palette')
+	-- 		add { '', 'n', '<leader>p', ':Telescope command_palette<CR>', {silent=true, noremap=true})
+	-- 		CpMenu = {
+	-- 			{'File',
+	-- 				{ 'save', ':w' },
+	-- 				{ 'save all', ':wa' },
+	-- 			},
+	-- 		}
+	-- 	end
+	-- }
+	
 	--
 	-- UI
   -- 
@@ -92,6 +122,11 @@ return require('packer').startup(function(use)
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
       require('lualine').setup({
+				options = {
+					component_separators = { left = '', right = ''},
+					section_separators = { left = '', right = ''},
+					disabled_filetypes = {'SidebarNvim'},
+				},
         sections = {
           lualine_a = {'filename'},
           lualine_b = {},
@@ -112,21 +147,13 @@ return require('packer').startup(function(use)
     end
   }
 
-	use {
-		'sidebar-nvim/sidebar.nvim',
-		config = function()
-			local sidebar = require("sidebar-nvim")
-			local opts = {open = true}
-			sidebar.setup(opts)
-		end
-  }
 
 	--
 	-- languages
 	--
   
 	-- v syntax highlighting
-  -- TODO replace with treesitter when v support is better
+	-- TODO replace with treesitter when v support is better
   use {
     -- 'ollykel/v-vim',
     'cheap-glitch/vim-v',
@@ -142,6 +169,7 @@ return require('packer').startup(function(use)
       -- Use an on_attach function to only map the following keys
       -- after the language server attaches to the current buffer
       local on_attach = function(client, bufnr)
+				local add = require('cmd').add
         local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
         local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -149,26 +177,24 @@ return require('packer').startup(function(use)
         buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
         -- Mappings.
-        local opts = { noremap=true, silent=true }
-
         -- See `:help vim.lsp.*` for documentation on any of the below functions
-        buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-        buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-        buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-        buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-        buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-        buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-        buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-        buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-        buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-        buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-        buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-        buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-        buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-        buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-        buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-        buf_set_keymap('n', '<space>z', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-        buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+        add { 'Lsp: goto declaration', 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: goto definition', 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: show hover', 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: goto implementation', 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: signature help', 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: add workspace folder', 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: remove workspace folder', 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: list workspace folders', 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', {}, buf_set_keymap }
+        add { 'Lsp: show type definition', 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: rename', 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: code action', 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: show references', 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', {}, buf_set_keymap }
+        add { 'Lsp Diagnostics: open', 'n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', {}, buf_set_keymap }
+        add { 'Lsp Diagnostics: goto prev', 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', {}, buf_set_keymap }
+        add { 'Lsp Diagnostics: goto next', 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', {}, buf_set_keymap }
+        add { 'Lsp Diagnostics: set location list', 'n', '<space>z', '<cmd>lua vim.diagnostic.setloclist()<CR>', {}, buf_set_keymap }
+        add { 'Lsp: format buffer', 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', {}, buf_set_keymap }
       end
 
       require'lspconfig'.vls.setup {
@@ -184,8 +210,8 @@ return require('packer').startup(function(use)
   use {
     'neomake/neomake',
     config = function()
-      local map = vim.api.nvim_set_keymap
-      map('n', 'M', ':Neomake!<CR>', {silent = true, noremap = true})
+			local add = require('cmd').add
+      add { 'Make: project', 'n', 'M', '<cmd>Neomake!<cr>' }
       vim.cmd[[let g:neomake_open_list = 2]]
     end
   }
@@ -193,7 +219,15 @@ return require('packer').startup(function(use)
 	--
 	-- under evaluation
 	-- 
-	
+
+	use {
+		'famiu/bufdelete.nvim',
+		config = function()
+			local add = require('cmd').add
+			add { 'Buffer: close & keep window', 'n', '<leader>w', '<cmd>Bdelete<cr>' }
+		end
+	}
+
 	use {
     'simrat39/lsp-trouble.nvim',
     requires = "kyazdani42/nvim-web-devicons",
@@ -204,16 +238,6 @@ return require('packer').startup(function(use)
 
 	-- use 'phaazon/hop.nvim'
 
-	use {
-		"projekt0n/circles.nvim",
-		requires = {{"kyazdani42/nvim-web-devicons"}, },
-		config = function()
-			require("circles").setup()
-		end
-	}
-
-	-- themes
-	-- use 'rafamadriz/neon'
 
 	-- bars
 	-- use {
@@ -222,6 +246,26 @@ return require('packer').startup(function(use)
 	-- }
 	-- use 'akinsho/bufferline.nvim'
 
+	-- statusbars
+	-- use 'feline-nvim/feline.nvim'
+	
+	-- sidebar
+	-- use {
+	-- 	'sidebar-nvim/sidebar.nvim',
+	-- 	config = function()
+	-- 		local sidebar = require("sidebar-nvim")
+	-- 		local opts = {open = true}
+	-- 		sidebar.setup(opts)
+	-- 	end
+  -- }
+	--
+	-- more powerful alternative to NeoMake... maybe
+	use {
+		'skywind3000/asyncrun.vim',
+		config = function()
+			vim.g.asyncrun_open = 6
+			vim.g.asyncrun_bell = 1
+		end
+	}
 end)
-
 

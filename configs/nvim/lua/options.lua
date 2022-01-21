@@ -1,11 +1,13 @@
-------------------------------------------------------------------------------
--- General
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- OPTIONS
+-------------------------------------------------------------------------------
 
 local opt = vim.opt
 local o = vim.o
 local g = vim.g
 local cmd = vim.cmd
+
+vim.g.mapleader = ' '
 
 cmd[[set title titlestring=%{substitute(getcwd(),'^.*/','','')}]]
 
@@ -54,8 +56,7 @@ opt.wrapscan = true
 -- y and and paste with system clipboard
 opt.clipboard = 'unnamedplus'
 
-
--- Automatically re-read file if a change was detected outside of vim
+-- re-read file if a change was detected outside of vim
 opt.autoread = true
 
 -- don't lose selection on indenting
@@ -64,3 +65,11 @@ cmd[[xnoremap < <gv]]
 
 -- sane visual mode pasting
 cmd[[xnoremap <expr> p 'pgv"'.v:register.'y`>']]
+
+-- clear search automatically
+vim.cmd[[nnoremap <silent><CR> :noh<CR><CR>]]
+vim.cmd[[nnoremap <silent><esc> :noh<return><esc>]]
+vim.cmd[[nnoremap <silent><esc>^[ <esc>^[]]
+
+-- fix Y - not sure why this broke
+vim.cmd[[nnoremap <silent>Y yy]]

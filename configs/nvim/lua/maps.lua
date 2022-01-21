@@ -1,57 +1,61 @@
-------------------------------------------------------------------------------
--- Mappings
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- MAPS
+-------------------------------------------------------------------------------
 
-local cmd = vim.cmd
+local add = require('cmd').add
 
-function map(mode, trigger, action, opts)
-  opts = opts or { noremap = true, silent = true }
-  vim.api.nvim_set_keymap(mode, trigger, action, opts)
-end
+-- this will be our only 'native' keymap - everything else should map through
+-- the actions module
+vim.api.nvim_set_keymap('', 'F', '<cmd>Commander<cr>', {silent = true})
 
-vim.g.mapleader = ' '
+--
+-- buffers
+--
 
--- move lines up/down
-map('n', '<A-j>', ':m .+1<CR>==')
-map('n', '<A-k>', ':m .-2<CR>==')
-map('i', '<A-j>', '<Esc>:m .+1<CR>==gi')
-map('i', '<A-k>', '<Esc>:m .-2<CR>==gi')
-map('v', '<A-j>', ":m '>+1<CR>gv=gv'")
-map('v', '<A-k>', ":m '<-2<CR>gv=gv'")
+add { 'Buffer: save', 'n', '<leader>s', '<cmd>w!<cr>' }
+add { 'Buffer: close', 'n', '<leader>w', '<cmd>bd<cr>' }
+add { 'Exit', 'n', '<leader>q', '<cmd>wa!<cr><cmd>qa<cr>' }
 
--- fast saving with <leader> and s
-map('n', '<leader>s', ':w!<CR>')
+--
+-- editing commands
+--
 
--- close buffer
-map('n', '<leader>w', ':bd!<CR>')
+add {
+	'Comments: toggle line',
+	'n', '<leader>/', 'gcc'
+}
+add {
+	'Comments: toggle selected lines', 
+	'v', '<leader>/', 'gc'
+}
+add {
+	'Edit: cut current line',
+	'n', 'X', 'Vx'
+}
 
--- close all windows and exit from neovim
-map('n', '<leader>q', ':qa!<CR>')
+--
+-- window navigation
+--
 
--- make
--- nnoremap M :make<CR>')
--- autocmd FileType rust nnoremap M :make run<CR>')
--- autocmd FileType zig nnoremap M :make run<CR>'
+add { 'Window: move left', 'n', '<C-h>', '<C-w>h' }
+add { 'Window: move right', 'n', '<C-l>', '<C-w>l' }
+add { 'Window: move down', 'n', '<C-j>', '<C-w>j' }
+add { 'Window: move up', 'n', '<C-k>', '<C-w>k' }
 
--- comment toggling
-map('n', '<C-/>', 'gcc', {})
-map('v', '<C-/>', 'gc', {})
-map('n', '<leader>/', 'gcc', {})
-map('v', '<leader>/', 'gc', {})
+--
+-- config helpers
+--  
 
--- Quick window switching
-map('n', '<C-h>', '<C-w>h', {})
-map('n', '<C-l>', '<C-w>l', {})
-map('n', '<C-j>', '<C-w>j', {})
-map('n', '<C-k>', '<C-w>k', {})
+add {
+	'Config: source current lua file',
+	'n', '<leader>so', '<cmd>luafile %<cr>'
+}	
 
--- clear search
-cmd[[nnoremap <silent><CR> :noh<CR><CR>]]
-cmd[[nnoremap <silent><esc> :noh<return><esc>]]
-cmd[[nnoremap <silent><esc>^[ <esc>^[]]
+--
+-- loc list navigation
+--
 
--- fix Y - not sure why this broke
-cmd[[nnoremap <silent>Y yy]]
-
--- TODO reload config 
-map("n", "<Leader>so", ":luafile %<CR>", {noremap = true})
+add {
+	'Loc List: next',
+	'n', ']l', '<cmd>lnext<cr>' 
+}
