@@ -15,6 +15,8 @@ PATH="$HOME/dev/lua-language-server/bin/macOS:$PATH"
 
 . /usr/local/etc/profile.d/z.sh
 
+VCPKG_ROOT="$HOME/vcpkg"
+
 for config_file (~/.zsh_lib/*.zsh); do
   source $config_file
 done

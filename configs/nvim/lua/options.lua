@@ -36,10 +36,6 @@ opt.wrap = false
 -- enable mouse support
 o.mouse = 'a'
 
--- undo
-o.undofile = true
-o.undodir = '~/.local/share/nvim/undo'
-
 -- highlight current line
 o.cursorline = true
 

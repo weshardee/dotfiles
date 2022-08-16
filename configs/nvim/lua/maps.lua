@@ -14,7 +14,8 @@ vim.api.nvim_set_keymap('', 'F', '<cmd>Commander<cr>', {silent = true})
 
 add { 'Buffer: save', 'n', '<leader>s', '<cmd>w!<cr>' }
 add { 'Buffer: close', 'n', '<leader>w', '<cmd>bd<cr>' }
-add { 'Exit', 'n', '<leader>q', '<cmd>wa!<cr><cmd>qa<cr>' }
+add { 'Buffer: drop', 'n', '<leader>q', '<cmd>q<cr>' }
+-- add { 'Exit', 'n', '<leader>q', '<cmd>wa!<cr><cmd>qa<cr>' }
 
 --
 -- editing commands

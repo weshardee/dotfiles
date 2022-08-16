@@ -21,7 +21,8 @@ vim.cmd([[
   augroup end
 ]])
 
-return require('packer').startup(function(use)
+local use = require('packer').use
+return require('packer').startup(function()
   use 'wbthomason/packer.nvim'
 
 	-- 
@@ -41,21 +42,27 @@ return require('packer').startup(function(use)
 	
   use 'nvim-treesitter/nvim-treesitter'
   use 'folke/lsp-colors.nvim'
-  use {
-		'Mofiqul/dracula.nvim',
-		opt = false,
-		config = function()
-			vim.cmd [[colorscheme dracula]]
+  -- use {
+		-- 'Mofiqul/dracula.nvim',
+		-- opt = false,
+		-- config = function()
+			-- vim.cmd [[colorscheme dracula]]
+		-- end
+	-- }
+	use {
+		'joshdick/onedark.vim', 
+		config = function() 
+			vim.cmd [[colorscheme onedark]] 
 		end
 	}
 
-	use {
-		"projekt0n/circles.nvim",
-		requires = {{"kyazdani42/nvim-web-devicons"}, },
-		config = function()
-			require("circles").setup()
-		end
-	}
+	-- use {
+	-- 	"projekt0n/circles.nvim",
+	-- 	requires = {{"kyazdani42/nvim-web-devicons"}, },
+	-- 	config = function()
+	-- 		require("circles").setup()
+	-- 	end
+	-- }
 
 	--
   -- project navigation
@@ -82,37 +89,18 @@ return require('packer').startup(function(use)
       add {
 				'Telescope: find files',
 				'n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>"}
-      add { 'Telescope:', 'n', ';', "<cmd>lua require('telescope.builtin').find_files()<cr>" }
-      add { 'Telescope:', 'n', '<C-p>', "<cmd>lua require('telescope.builtin').find_files()<cr>" }
-      add { 'Telescope:', 'n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>" }
-      add { 'Telescope:', 'n', '\'', "<cmd>lua require('telescope.builtin').live_grep()<cr>" }
-      add { 'Telescope:', 'n', '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>" }
-      add { 'Telescope:', 'n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>" }
-      add { 'Telescope:', 'n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>" }
+      add { 'Telescope: find files', 'n', ';', "<cmd>lua require('telescope.builtin').find_files()<cr>" }
+      add { 'Telescope: find files', 'n', '<C-p>', "<cmd>lua require('telescope.builtin').find_files()<cr>" }
+      add { 'Telescope: grep', 'n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>" }
+      add { 'Telescope: grep', 'n', '\'', "<cmd>lua require('telescope.builtin').live_grep()<cr>" }
+      add { 'Telescope: find string', 'n', '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>" }
+      add { 'Telescope: find buffer', 'n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>" }
+      add { 'Telescope: find help', 'n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>" }
       
-			add { 'Telescope:', 'n', '<leader>fd', "<cm:d>lua require('telescope.builtin').lsp_definitions()<cr>" }
-			add { 'Telescope:', 'n', '<leader>fd', "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>" }
+			add { 'Telescope: find definition', 'n', '<leader>fd', "<cmd>lua require('telescope.builtin').lsp_definitions()<cr>" }
     end
   }
 
-
-	-- use {
-	-- 	"LinArcX/telescope-command-palette.nvim",
-	-- 	require = {'nvim-telescope/telescope.nvim'},
-	-- 	config = function()
-      -- map = vim.api.nvim_set_keymap
-      -- opts = {silent = true, noremap = true}
-	-- 		require('telescope').load_extension('command_palette')
-	-- 		add { '', 'n', '<leader>p', ':Telescope command_palette<CR>', {silent=true, noremap=true})
-	-- 		CpMenu = {
-	-- 			{'File',
-	-- 				{ 'save', ':w' },
-	-- 				{ 'save all', ':wa' },
-	-- 			},
-	-- 		}
-	-- 	end
-	-- }
-	
 	--
 	-- UI
   -- 
@@ -152,13 +140,15 @@ return require('packer').startup(function(use)
 	-- languages
 	--
   
-	-- v syntax highlighting
-	-- TODO replace with treesitter when v support is better
-  use {
-    -- 'ollykel/v-vim',
-    'cheap-glitch/vim-v',
-    ft = {'v', 'vsh', 'vlang'}
-  }
+  -- use {
+		-- 'Tetralux/odin.vim',
+  --   ft = {'odin'},
+		-- config = function()
+			-- require('odin.vim').setup()
+		-- end
+  -- }
+
+	use {'sheerun/vim-polyglot'}
 
   -- LSP
   use {
@@ -202,23 +192,35 @@ return require('packer').startup(function(use)
         on_attach = on_attach,
       }
 
+			require'lspconfig'.ols.setup {
+				cmd = {'/Users/wes/dev/ols/ols'},
+				on_attach = on_attach,
+			}
+
       -- TODO lua https://jdhao.github.io/2021/08/12/nvim_sumneko_lua_conf/
     end
   }
  
   -- async builds
-  use {
-    'neomake/neomake',
-    config = function()
-			local add = require('cmd').add
-      add { 'Make: project', 'n', 'M', '<cmd>Neomake!<cr>' }
-      vim.cmd[[let g:neomake_open_list = 2]]
-    end
-  }
+  -- use {
+  --   'neomake/neomake',
+  --   config = function()
+			-- local add = require('cmd').add
+  --     -- add { 'Make: project', 'n', 'M', '<cmd>Neomake!<cr>' }
+  --     -- vim.cmd[[let g:neomake_open_list = 2]]
+  --   end
+  -- }
 
 	--
 	-- under evaluation
 	-- 
+
+	use {
+		'tpope/vim-vinegar',
+		config = function()
+			vim.cmd[[let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+']]
+		end
+	}
 
 	use {
 		'famiu/bufdelete.nvim',
@@ -268,4 +270,5 @@ return require('packer').startup(function(use)
 		end
 	}
 end)
+
 
