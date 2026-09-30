@@ -193,7 +193,7 @@ return require('packer').startup(function()
       }
 
 			require'lspconfig'.ols.setup {
-				cmd = {'/Users/wes/dev/ols/ols'},
+				cmd = {'/Users/wes/ols/ols'},
 				on_attach = on_attach,
 			}
 
