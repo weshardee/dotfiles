@@ -3,7 +3,7 @@ vls.log
 .DS_Store
 zsh_lib
 ~
-~/.zshrc.local
+.zshrc.local
 .env
 .env.local
 *.env
